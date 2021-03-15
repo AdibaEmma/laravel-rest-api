@@ -46,4 +46,45 @@ class ItemsApiController extends Controller
                 
         
     }
+
+    public function store() {
+
+        request()->validate([
+            'title' => 'required',
+            'price' => 'required',
+            'description' => 'required',
+            'category_id' => 'required'
+        ]);
+
+
+        try {
+
+            $item = Item::create([
+                'title' => request('title'),
+                'price' => request('price'),
+                'description' => request('description'),
+                'category_id' => request('category_id'),
+            ]);
+    
+            if($item) {
+
+                return response()->json([
+                    'item' => $item
+                ], 201);
+
+            } else {
+
+                throw new Exception('an error occured, item could not be created');
+
+            }
+            
+            
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+       
+    }
 }
