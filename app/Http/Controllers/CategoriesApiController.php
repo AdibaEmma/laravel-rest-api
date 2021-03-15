@@ -47,4 +47,13 @@ class CategoriesApiController extends Controller
             'updated_category' => Category::find($category)
         ];
     }
+
+    public function destroy(category $category) {
+
+        $success = $category->delete();
+
+        return [
+            'deleted' => $success
+        ];
+    }
 }
