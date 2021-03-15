@@ -119,4 +119,34 @@ class ItemsApiController extends Controller
         
 
     }
+
+    public function update(Item $item) {
+        request()->validate([ 
+            'title' => 'required',
+            'price' => 'required',
+            'description' => 'required',
+        ]);
+
+
+        try {
+            $success = $item->update([
+                'title' => request('title'),
+                'price' => request('price'),
+                'description' => request('description'),
+                'category_id' => request('category_id'),
+            ]);
+
+    
+            return [
+                'updated' => $success,
+                'updated_item' => Item::find($item)
+            ];
+
+        } catch (\Throwable $th) {
+
+            throw new Exception('an error occured');
+        }
+        
+    }
+
 }
