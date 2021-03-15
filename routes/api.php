@@ -25,7 +25,7 @@ Route::get('/items/{item}', [ItemsApiController::class, 'show']);
 Route::put('/items/{item}', [ItemsApiController::class, 'update']);
 Route::delete('/items/{item}', [ItemsApiController::class, 'destroy']);
 
-#######################################################################
+#########################################################################
 
 // Categories routes
 Route::get('/categories', [CategoriesApiController::class, 'index']);
