@@ -149,4 +149,25 @@ class ItemsApiController extends Controller
         
     }
 
+    public function destroy(Item $item) {
+
+        try {
+ 
+        $success = $item->delete();
+ 
+        if( $success ) { 
+            return response()->json([
+                'deleted' => $success
+                ], 200);
+        } else {
+            throw new Exception("Error Processing Request", 1);
+            
+        }
+        
+        } catch (\Exception $e) {
+            return response()->json([
+            'error' => $e->getMessage()
+            ], 500);
+        }
+     }
 }
