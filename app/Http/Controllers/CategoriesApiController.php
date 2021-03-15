@@ -25,4 +25,26 @@ class CategoriesApiController extends Controller
 
         return $categories;
     }
+
+    public function show(Category $category) {
+
+        return $category;
+
+    }
+
+    public function update(Category $category) {
+        request()->validate([
+            'name' => 'required',
+        ]);
+
+
+        $success = $category->update([
+            'name' => request('name'),
+        ]);
+
+        return [
+            'updated' => $success,
+            'updated_category' => Category::find($category)
+        ];
+    }
 }
