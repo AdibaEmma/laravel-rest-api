@@ -24,3 +24,12 @@ Route::post('/items', [ItemsApiController::class, 'store']);
 Route::get('/items/{item}', [ItemsApiController::class, 'show']);
 Route::put('/items/{item}', [ItemsApiController::class, 'update']);
 Route::delete('/items/{item}', [ItemsApiController::class, 'destroy']);
+
+#######################################################################
+
+// Categories routes
+Route::get('/categories', [CategoriesApiController::class, 'index']);
+Route::post('/categories', [CategoriesApiController::class, 'store']);
+Route::get('/categories/{category}', [CategoriesApiController::class, 'show']);
+Route::put('/categories/{category}', [CategoriesApiController::class, 'update']);
+Route::delete('/categories/{category}', [CategoriesApiController::class, 'destroy']);
