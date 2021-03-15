@@ -20,3 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Items routes
 Route::get('/items', [ItemsApiController::class, 'index']);
+Route::post('/items', [ItemsApiController::class, 'store']);
+Route::get('/items/{item}', [ItemsApiController::class, 'show']);
+Route::put('/items/{item}', [ItemsApiController::class, 'update']);
+Route::delete('/items/{item}', [ItemsApiController::class, 'destroy']);
