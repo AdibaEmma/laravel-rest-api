@@ -11,4 +11,18 @@ class CategoriesApiController extends Controller
         return Category::all();
         
     }
+
+    public function store() {
+
+        request()->validate([
+            'name' => 'required',
+        ]);
+
+
+        $categories = Category::create([
+            'name' => request('name'),
+        ]);
+
+        return $categories;
+    }
 }
