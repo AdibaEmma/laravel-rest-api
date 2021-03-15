@@ -87,4 +87,36 @@ class ItemsApiController extends Controller
         }
        
     }
+
+    public function show(Item $item) {
+
+        
+        try {
+
+            if ( $item ) { 
+
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'price' => $item->price,
+                    'description' => $item->description,
+                    'category' => $item->category->name,
+                ];
+
+            } else {
+
+                throw new Exception('item not found');
+
+            }
+            
+        } catch (Exception $e) {
+
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 404);
+            
+        }
+        
+
+    }
 }
