@@ -19,11 +19,11 @@ class ItemsApiController extends Controller
 
         try {
 
-            if(isset($category)) {
+            if( isset( $category ) ) {
 
                 $cat_items = Item::where('category_id', $category)->get();
     
-                if ( $cat_items->isNotEmpty()) {
+                if ( $cat_items->isNotEmpty() ) {
     
                     return $cat_items;
                     
@@ -36,8 +36,10 @@ class ItemsApiController extends Controller
     
             } 
 
-            if(!empty($items)) {
+            if( !empty($items )) {
+
                 return $items;
+                
             } else {
 
                 throw new Exception("No items found!");
@@ -74,7 +76,7 @@ class ItemsApiController extends Controller
                 'category_id' => request('category_id'),
             ]);
     
-            if($item) {
+            if( $item ) {
 
                 return response()->json([
                     'item' => $item
@@ -96,9 +98,9 @@ class ItemsApiController extends Controller
        
     }
 
-    public function show($id) {
+    public function show( $id ) {
 
-        $item = Item::find($id);
+        $item = Item::find( $id );
 
         try {
 
@@ -128,7 +130,7 @@ class ItemsApiController extends Controller
 
     }
 
-    public function update($id) {
+    public function update( $id ) {
 
         request()->validate([ 
             'title' => 'required',
@@ -139,9 +141,9 @@ class ItemsApiController extends Controller
 
         try {
 
-            $item = Item::find($id);
+            $item = Item::find( $id );
 
-            if (!$item) {
+            if (!$item ) {
 
                 throw new Exception('error on update, cannot find item with id='.$id);
             }
@@ -171,13 +173,13 @@ class ItemsApiController extends Controller
         
     }
 
-    public function destroy($id) {
+    public function destroy( $id ) {
 
         try {
  
-            $item = Item::find($id);
+            $item = Item::find( $id );
 
-            if (!$item) {
+            if ( !$item ) {
 
                 throw new Exception('error on delete, cannot find item with id='.$id, 1);
 
@@ -190,6 +192,7 @@ class ItemsApiController extends Controller
                     'deleted' => $success
                     ], 200);
             } else {
+
                 throw new Exception("Error Processing Request", 500);
                 
             }
