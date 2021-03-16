@@ -104,7 +104,7 @@ class ItemsApiController extends Controller
 
             if ( !$item ) { 
 
-                throw new ModelNotFoundException('item not found');
+                throw new Exception('item not found');
 
             } 
 
@@ -179,7 +179,7 @@ class ItemsApiController extends Controller
 
             if (!$item) {
 
-                throw new Exception('error on delete, cannot find item with id='.$id);
+                throw new Exception('error on delete, cannot find item with id='.$id, 1);
 
             }
 
@@ -190,14 +190,14 @@ class ItemsApiController extends Controller
                     'deleted' => $success
                     ], 200);
             } else {
-                throw new Exception("Error Processing Request", 1);
+                throw new Exception("Error Processing Request", 500);
                 
             }
         
         } catch (\Exception $e) {
             return response()->json([
             'error' => $e->getMessage()
-            ], 500);
+            ],400);
         }
      }
 }
