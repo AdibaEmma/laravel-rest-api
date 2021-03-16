@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,16 +16,16 @@ class ItemsApiController extends Controller
         
         $category = request('category');
         $items = Item::all();
+
         try {
 
             if(isset($category)) {
 
-                $items = Item::where('category_id', $category)->get();
-                $items->load('categories');
+                $cat_items = Item::where('category_id', $category)->get();
     
-                if ( $items->isNotEmpty()) {
+                if ( $cat_items->isNotEmpty()) {
     
-                    return $items;
+                    return $cat_items;
                     
                 }  else {
                     
@@ -95,28 +96,28 @@ class ItemsApiController extends Controller
        
     }
 
-    public function show(Item $item) {
+    public function show($id) {
+
+        $item = Item::find($id);
 
         try {
 
-            if ( $item ) { 
+            if ( !$item ) { 
 
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'price' => $item->price,
-                    'description' => $item->description,
-                    'category' => $item->category->name,
-                    'date_created' => $item->created_at
-                ];
+                throw new ModelNotFoundException('item not found');
 
-            } else {
+            } 
 
-                throw new Exception('item not found');
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'price' => $item->price,
+                'description' => $item->description,
+                'category' => $item->category->name,
+                'date_created' => $item->created_at
+            ];
 
-            }
-            
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
 
             return response()->json([
                 'error' => $e->getMessage()
@@ -127,7 +128,8 @@ class ItemsApiController extends Controller
 
     }
 
-    public function update(Item $item) {
+    public function update($id) {
+
         request()->validate([ 
             'title' => 'required',
             'price' => 'required',
@@ -136,6 +138,14 @@ class ItemsApiController extends Controller
 
 
         try {
+
+            $item = Item::find($id);
+
+            if (!$item) {
+
+                throw new Exception('error on update, cannot find item with id='.$id);
+            }
+            
             $success = $item->update([
                 'title' => request('title'),
                 'price' => request('price'),
@@ -144,32 +154,45 @@ class ItemsApiController extends Controller
             ]);
 
     
+            
+
             return [
                 'updated' => $success,
                 'updated_item' => Item::find($item)
             ];
 
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
 
-            throw new Exception('an error occured');
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
+           
         }
         
     }
 
-    public function destroy(Item $item) {
+    public function destroy($id) {
 
         try {
  
-        $success = $item->delete();
- 
-        if( $success ) { 
-            return response()->json([
-                'deleted' => $success
-                ], 200);
-        } else {
-            throw new Exception("Error Processing Request", 1);
-            
-        }
+            $item = Item::find($id);
+
+            if (!$item) {
+
+                throw new Exception('error on delete, cannot find item with id='.$id);
+
+            }
+
+            $success = $item->delete();
+    
+            if( $success ) { 
+                return response()->json([
+                    'deleted' => $success
+                    ], 200);
+            } else {
+                throw new Exception("Error Processing Request", 1);
+                
+            }
         
         } catch (\Exception $e) {
             return response()->json([

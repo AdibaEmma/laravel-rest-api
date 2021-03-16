@@ -2,14 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Models\Category;
 
 class CategoriesApiController extends Controller
 {
     public function index() {
+        try {
+            $categories = Category::all();
 
-        return Category::all();
+            if(empty($categories)) {
+                throw new ModelNotFoundException("category list empty", 1);
+            }
+
+            return $categories;
+
+
+        } catch (\Throwable $th) {
+            
+        }
+        
         
     }
 
