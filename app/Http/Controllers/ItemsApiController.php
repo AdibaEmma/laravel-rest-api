@@ -14,12 +14,13 @@ class ItemsApiController extends Controller
     public function index() {
         
         $category = request('category');
-
+        $items = Item::all();
         try {
 
             if(isset($category)) {
 
                 $items = Item::where('category_id', $category)->get();
+                $items->load('categories');
     
                 if ( $items->isNotEmpty()) {
     
@@ -32,13 +33,19 @@ class ItemsApiController extends Controller
                 }
                     
     
-            }
+            } 
 
-            return Item::all();
+            if(!empty($items)) {
+                return $items;
+            } else {
+
+                throw new Exception("No items found!");
+                
+            }
 
         }
         
-        catch (\Exception $e) {
+        catch (\Throwable $e) {
             return response()->json([
                 'error' => $e->getMessage()
             ], 400);
@@ -53,7 +60,7 @@ class ItemsApiController extends Controller
             'title' => 'required',
             'price' => 'required',
             'description' => 'required',
-            'category_id' => 'required'
+            'category_id' => 'required',
         ]);
 
 
@@ -90,7 +97,6 @@ class ItemsApiController extends Controller
 
     public function show(Item $item) {
 
-        
         try {
 
             if ( $item ) { 
@@ -101,6 +107,7 @@ class ItemsApiController extends Controller
                     'price' => $item->price,
                     'description' => $item->description,
                     'category' => $item->category->name,
+                    'date_created' => $item->created_at
                 ];
 
             } else {
