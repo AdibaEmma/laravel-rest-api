@@ -9,7 +9,9 @@ use Exception;
 class CategoriesApiController extends Controller
 {
     public function index() {
+
         try {
+
             $categories = Category::all();
 
             if(empty($categories)) {
@@ -21,8 +23,11 @@ class CategoriesApiController extends Controller
 
 
         } catch (\Throwable $e) {
+
             return response()->json([
+
                 'error' => $e->getMessage()
+
                 ],400);
         }
         
@@ -39,7 +44,7 @@ class CategoriesApiController extends Controller
             'name' => request('name'),
         ]);
 
-        if(!$category) {
+        if( !$category ) {
 
             throw new Exception('an error occured, category could not be created');
 
@@ -78,6 +83,7 @@ class CategoriesApiController extends Controller
     }
 
     public function update($id) {
+
         request()->validate([
             'name' => 'required',
         ]);
@@ -87,7 +93,7 @@ class CategoriesApiController extends Controller
 
             $category = Category::find($id);
 
-            if (!$category) {
+            if ( !$category ) {
 
                 throw new Exception('error on update, cannot find category with id='.$id);
             }
@@ -117,7 +123,7 @@ class CategoriesApiController extends Controller
  
             $category = Category::find($id);
 
-            if (!$category) {
+            if ( !$category ) {
 
                 throw new Exception('error on delete, cannot find category with id='.$id, 1);
 
